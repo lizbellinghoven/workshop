@@ -25,36 +25,36 @@ jobs:
           - 1433:1433
 
 steps:
-    - uses: actions/checkout@v4
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v4
-      with:
-        dotnet-version: 8.0.x
-    - name: Restore dependencies
-      run: dotnet restore wingtips/wingtips.sqlproj
-    - name: Build
-      run: dotnet build wingtips/wingtips.sqlproj --no-restore
-    - name: 'wait for sql container to be ready'
-      run: |
-        set +o pipefail +e
-        for i in {1..60};
-        do
-            sqlcmd -S localhost -U sa -P $ -d master -Q "select getdate()"
-            if [ $? -eq 0 ]
-            then
-                echo "sql server ready"
-                break
-            else
-                echo "not ready yet..."
-                sleep 1
-            fi
-        done
-        set -o pipefail -e
+- uses: actions/checkout@v4
+- name: Setup .NET
+  uses: actions/setup-dotnet@v4
+  with:
+    dotnet-version: 8.0.x
+- name: Restore dependencies
+  run: dotnet restore wingtips/wingtips.sqlproj
+- name: Build
+  run: dotnet build wingtips/wingtips.sqlproj --no-restore
+- name: 'wait for sql container to be ready'
+  run: |
+    set +o pipefail +e
+    for i in {1..60};
+    do
+        sqlcmd -S localhost -U sa -P $ -d master -Q "select getdate()"
+        if [ $? -eq 0 ]
+        then
+            echo "sql server ready"
+            break
+        else
+            echo "not ready yet..."
+            sleep 1
+        fi
+    done
+    set -o pipefail -e
 
-    - name: Publish SQL project
-      run: |
-        sqlpackage /Action:Publish /SourceFile:Wingtips/bin/Debug/Wingtips.dacpac 
-        /TargetConnectionString:"Data Source=localhost,1433;Database=Wingtips;User ID=sa;Password="${{ secrets.CONTAINER_SQL_PASSWORD }}"
-        ;TrustServerCertificate=True;" 
-        /p:AllowIncompatiblePlatform=true    
-        
+- name: Publish SQL project
+  run: |
+    sqlpackage /Action:Publish /SourceFile:Wingtips/bin/Debug/Wingtips.dacpac 
+    /TargetConnectionString:"Data Source=localhost,1433;Database=Wingtips;User ID=sa;Password="${{ secrets.CONTAINER_SQL_PASSWORD }}"
+    ;TrustServerCertificate=True;" 
+    /p:AllowIncompatiblePlatform=true    
+      
