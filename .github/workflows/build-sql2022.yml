@@ -20,7 +20,7 @@ jobs:
         image: mcr.microsoft.com/mssql/server:2022-latest 
         env: 
           ACCEPT_EULA: 1 
-          SA_PASSWORD: "${{ secrets.CONTAINER_SQL_PASSWORD }}"
+          SA_PASSWORD: ${{ secrets.CONTAINER_SQL_PASSWORD }}
         ports: 
           - 1433:1433
 
@@ -55,6 +55,6 @@ jobs:
       run: |
         sqlpackage /Action:Publish /SourceFile:Wingtips/bin/Debug/Wingtips.dacpac 
         /TargetConnectionString:"Data Source=localhost,1433;Database=Wingtips;User ID=sa;Password=${{ secrets.CONTAINER_SQL_PASSWORD }}
-        ;TrustServerCertificate=True;" 
+        ;TrustServerCertificate=True;"
         /p:AllowIncompatiblePlatform=true    
           
