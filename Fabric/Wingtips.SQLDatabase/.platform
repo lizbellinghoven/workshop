@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SQLDatabase",
+    "displayName": "Wingtips"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "6a51f84a-c943-96ff-427b-1905f621f3ae"
+  }
+}
